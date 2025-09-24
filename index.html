@@ -355,7 +355,7 @@
         <!-- Auth Container -->
         <div class="auth-container">
             <h2>Create Account</h2>
-            <form action="#" method="post">
+            <form action="#" method="post" id="signupForm">
                 <div class="input-group">
                     <input type="text" name="name" id="name" placeholder="Name" required>
                     <label for="name">Name</label>
@@ -413,6 +413,18 @@
               confirmButtonText: 'Close'
           });
       }
+
+      // Redirect to home page after signup
+      document.addEventListener('DOMContentLoaded', function() {
+        var signupForm = document.getElementById('signupForm');
+        if (signupForm) {
+          signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // You can add validation or AJAX here if needed
+            window.location.href = 'PSV-home.html';
+          });
+        }
+      });
     </script>
     
 </body>
