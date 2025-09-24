@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> PSV- Cart</title>
+    <link rel="stylesheet" href="cart.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+      body {
+        font-family: 'Playfair Display', serif;
+        background-color: #af9191;
+        color: #6b5a45;
+        margin: 0;
+        padding-top: 110px; /* Added to account for fixed header */
+      }
+
+      .header {
+        background-color: #5c4343;
+        height: 70px;
+        text-align: center;
+        padding: 20px;
+        padding-bottom: 20px;
+        margin-top: 0;
+        font-size: 18px;
+        color: #f6b25f;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .navbar ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .navbar a {
+        text-decoration: none;
+        color: #000000;
+        font-weight: bold;
+      }
+
+      .cart-section {
+        padding: 50px 20px;
+        text-align: center;
+      }
+      .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+
+      .cart-item-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 20px;
+      }
+
+      .cart-item-details {
+        flex-grow: 1;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+      }
+
+      .quantity-controls button {
+        background-color: #8b7355;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .item-total {
+        color: #8b7355;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      #cartTotal {
+        text-align: right;
+        padding: 20px;
+        font-size: 1.2em;
+        color: #8b7355;
+      }
+
+      .btn {
+        background-color: #8b7355;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        border-radius: 5px;
+      }
+
+      .btn:hover {
+        background-color: #d9953d;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #8b7355;
+        color: white;
+      }
+      .footer p {
+        color: white;
+        text-decoration: none;
+        padding-top:10px;
+        margin:20px;
+
+      }
+
+
+      .cart-footer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background-color: #fff;
+          box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+          padding: 15px;
+          z-index: 1000;
+      }
+
+      .footer-content {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 20px;
+      }
+
+      .footer-total {
+          font-size: 1.2em;
+          color: #8b7355;
+      }
+
+      .footer-total span:first-child {
+          margin-right: 10px;
+      }
+
+      .buy-now-btn {
+          background-color: #8b7355;
+          color: #fff;
+          border: none;
+          padding: 12px 30px;
+          border-radius: 5px;
+          font-size: 1.1em;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+
+      .buy-now-btn:hover {
+          background-color: #6b5a45;
+      }
+
+      .cart-section {
+          margin-bottom: 100px;
+      }
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .item-checkbox {
+        margin-right: 15px;
+      }
+
+      .item-checkbox input {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .select-all {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #8b7355;
+      }
+      .card-details {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+      }
+
+      .card-input-group {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .card-input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .card-input:focus {
+        outline: none;
+        border-color: #8b7355;
+      }
+
+      .order-summary {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .order-item {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 15px;
+      }
+
+      .order-total {
+        text-align: right;
+        padding: 15px;
+        border-top: 2px solid #8b7355;
+        color: #8b7355;
+        font-weight: bold;
+      }.logo img {
+        width: 150px; /* Adjusted width for rectangular shape */
+        height: 75px; /* Adjusted height for rectangular shape */
+        border-radius: 8px; /* Optional: Slightly rounded corners */
+        box-shadow: 0 4px 6px rgba(107, 90, 69, 0.2);
+      }
+</style>
+</head>
+<body>
+<header class="header">
+    <!-- Logo -->
+<div class="logo">
+  <a href="PSV-home.html">
+    <img src="psvlogo1.png" alt="PSV QuickBuy Logo"></a>
+    
+       
+    </div>
+      <nav class="navbar">
+        <ul>
+          <li><a href="PSV-home.html">Home</a></li>
+          <li><a href="PSV-exploremore.html">Collections</a></li>
+          <li><a href="PSV-cart.html">Cart</a></li>
+          <li><a href="PSV-orders.html">Orders</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="cart-section">
+      <h2>Your Shopping Cart</h2>
+      <div id="cartItems"></div>
+    </section>
+
+    <footer class="cart-footer">
+      <div class="footer-content">
+        <div class="footer-total">
+          <div class="cart-total">
+            <h3 id="CartTotal">Total: ₹0.00</h3>
+          </div>
+        </div>
+        <button onclick="proceedToOrder()" class="buy-now-btn">Buy Now</button>
+      </div>
+    </footer>
+
+    <script>
+      function formatIndianPrice(price) {
+        return new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "INR",
+          maximumFractionDigits: 0,
+        }).format(price);
+      }
+
+      function displayCartItems() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartItemsContainer = document.getElementById("cartItems");
+        const cartTotalElement = document.getElementById("CartTotal");
+        cartItemsContainer.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item) => {
+          const itemTotal = item.price * item.quantity;
+          total += itemTotal;
+
+          const cartItem = document.createElement("div");
+          cartItem.classList.add("cart-item");
+          cartItem.innerHTML = `
+                <img src="${item.image}" alt="${
+            item.name
+          }" class="cart-item-image">
+                <div class="cart-item-details">
+                    <h3>${item.name}</h3>
+                    <p>Unit Price: ${formatIndianPrice(item.price)}</p>
+                    <div class="quantity-controls">
+                        <button onclick="updateQuantity('${
+                          item.name
+                        }', -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity('${
+                          item.name
+                        }', 1)">+</button>
+                    </div>
+                    <p class="item-total">Subtotal: ${formatIndianPrice(
+                      itemTotal
+                    )}</p>
+                </div>
+            `;
+          cartItemsContainer.appendChild(cartItem);
+        });
+
+        cartTotalElement.textContent = `Cart Total: ${formatIndianPrice(
+          total
+        )}`;
+      }
+
+      function updateQuantity(productName, change) {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const productIndex = cart.findIndex(
+          (item) => item.name === productName
+        );
+
+        if (productIndex !== -1) {
+          const newQuantity = cart[productIndex].quantity + change;
+          if (newQuantity > 0) {
+            cart[productIndex].quantity = newQuantity;
+            localStorage.setItem("cart", JSON.stringify(cart));
+          } else {
+            cart.splice(productIndex, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+          }
+          displayCartItems();
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", displayCartItems);
+
+      // ...existing code...
+
+      
+      function proceedToOrder() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        if (cart.length === 0) {
+          Swal.fire({
+            title: "Empty Cart",
+            text: "Please add items to cart before proceeding",
+            icon: "warning",
+            confirmButtonColor: "#8b7355",
+          });
+          return;
+        }
+
+        const total = cart.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+
+        Swal.fire({
+          title: "✨ Proceed to Checkout",
+          html: `
+              <div class="custom-swal">
+                  <h3 style="color:#8b7355; margin:15px 0;">Cart Summary</h3>
+                  <p style="color:#8b7355;">Total Items: ${cart.length}</p>
+                  <p style="color:#8b7355; font-size:1.2em;">Total Amount: ${formatIndianPrice(
+                    total
+                  )}</p>
+              </div>
+          `,
+          showCancelButton: true,
+          confirmButtonColor: "#8b7355",
+          cancelButtonColor: "#f6b25f",
+          confirmButtonText: "Continue to Payment",
+          cancelButtonText: "Keep Shopping",
+          customClass: {
+            popup: "animated-popup",
+          },
+          showClass: {
+            popup: "animate__animated animate__fadeInDown",
+          },
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Store current cart as order
+            localStorage.setItem("currentOrder", JSON.stringify(cart));
+            // Redirect to orders page
+            window.location.href = "PSV-orders.html";
+          }
+        });
+      }
+      function calculateTotal(cart) {
+        return cart.reduce(
+          (total, item) => total + item.price * item.quantity,
+          0
+        );
+      }
+
+      // Initialize cart display
+      document.addEventListener("DOMContentLoaded", displayCartItems);
+
+      function displayOrderItems() {
+        const orderItems =
+          JSON.parse(localStorage.getItem("currentOrder")) || [];
+        const orderSummary = document.getElementById("orderSummary");
+        let total = 0;
+
+        if (orderItems.length === 0) {
+          window.location.href = "PSV-cart.html";
+          return;
+        }
+
+        const itemsHTML = orderItems
+          .map((item) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            return `
+                <div class="order-item">
+                    <img src="${item.image}" alt="${
+              item.name
+            }" class="order-item-image">
+                    <div class="order-item-details">
+                        <h3>${item.name}</h3>
+                        <p>Price: ${formatIndianPrice(item.price)}</p>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p class="item-total">Subtotal: ${formatIndianPrice(
+                          itemTotal
+                        )}</p>
+                    </div>
+                </div>
+            `;
+          })
+          .join("");
+
+        orderSummary.innerHTML = `
+            <h2>Order Summary</h2>
+            ${itemsHTML}
+            <div class="order-total">
+                <h3>Total Amount: ${formatIndianPrice(total)}</h3>
+            </div>
+        `;
+      }
+
+      document.addEventListener("DOMContentLoaded", displayOrderItems);
+
+    </script>
+  </body>
+</html>
